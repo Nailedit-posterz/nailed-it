@@ -377,7 +377,7 @@
     <div class="steps">
       <div class="step"><div class="step-num">01</div><div class="step-title">Browse &amp; Add</div><div class="step-sub">Tap any poster to see it up close, pick A4 or A3, and add it to your cart.</div></div>
       <div class="step"><div class="step-num">02</div><div class="step-title">Open Your Cart</div><div class="step-sub">Every Poster ID, size, and the subtotal is right there — no copying needed.</div></div>
-      <div class="step"><div class="step-num">03</div><div class="step-title">Place Order</div><div class="step-sub">Hit "Place Order", pay via the QR code, upload your screenshot, and add your delivery details.</div></div>
+      <div class="step"><div class="step-num">03</div><div class="step-title">Place Order via Google Form</div><div class="step-sub">Hit "Place Order via Google Form", copy in your Poster IDs + sizes from the cart, pay via the QR code, upload your payment screenshot, and add your delivery details.</div></div>
       <div class="step"><div class="step-num">04</div><div class="step-title">We Print &amp; Ship</div><div class="step-sub">Your posters are printed on 210 GSM matte stock and packed in a rigid tube.</div></div>
     </div>
   </div>
@@ -401,7 +401,7 @@
     </div>
     <div class="note-box">
       <span class="section-tag">Before You Submit</span>
-      <p style="margin-top:10px;">Your cart's Poster IDs and sizes are carried over to the order page automatically (e.g. <b>MT-01 (A3)</b>) — no need to retype them. Double-check your pincode and phone number — that's how we confirm your order and coordinate delivery. One order submission per cart, please.</p>
+      <p style="margin-top:10px;">We accept orders via Google Form only. Copy your cart's Poster IDs and sizes (e.g. <b>MT-01 (A3)</b>) from the drawer into the form when you submit it. Double-check your pincode and phone number — that's how we confirm your order and coordinate delivery. One form submission per cart, please.</p>
     </div>
   </div>
 </section>
@@ -449,10 +449,10 @@
     <div class="drawer-empty">Your cart is empty.<br>Go pick something that speaks you.</div>
   </div>
   <div class="drawer-foot" id="drawerFoot" style="display:none;">
-    <div class="drawer-hint">These Poster IDs + sizes are sent automatically when you place your order:</div>
+    <div class="drawer-hint">Copy these Poster IDs + sizes into the Google Form when you place your order:</div>
     <div class="drawer-ids" id="drawerIds"></div>
     <div class="drawer-subtotal"><span>Subtotal</span><span id="drawerSubtotal">₹0</span></div>
-    <a href="#" class="btn btn-primary" id="orderFormBtn">Place Order →</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScZOO0zdjYY8oC7AcokhZ2s-nPYGLblgdTX20BEtlkPq_YxKw/viewform?usp=publish-editor" target="_blank" rel="noopener" class="btn btn-primary" id="orderFormBtn">Place Order via Google Form →</a>
   </div>
 </div>
 
@@ -919,16 +919,10 @@ function renderCart(){
   const subtotal = cart.reduce((s,i)=> s + PRICES[i.size]*i.qty, 0);
   document.getElementById('drawerSubtotal').textContent = `₹${subtotal}`;
 
-  // Save cart data so order.html can auto-fill it.
-  // Sent BOTH via localStorage and URL params -- URL params are the
-  // reliable path when these files are opened directly (file://), since
-  // some browsers don't share localStorage across separately-opened local
-  // files even in the same folder.
-  localStorage.setItem('nailedit_cart_summary', idsSummary);
-  localStorage.setItem('nailedit_cart_total', String(subtotal));
-  localStorage.setItem('nailedit_cart_qty', String(totalQty));
-  const orderUrl = `order.html?type=regular&ids=${encodeURIComponent(idsSummary)}&total=${subtotal}&qty=${totalQty}`;
-  document.getElementById('orderFormBtn').href = orderUrl;
+  // Orders are now accepted via Google Form (order.html has been retired).
+  // The Google Form link is static and already set on the button's href
+  // in the markup -- shoppers copy the IDs/sizes/subtotal shown above
+  // into the form themselves when they submit it.
 
   body.querySelectorAll('[data-inc]').forEach(b=>b.addEventListener('click', ()=>changeQty(b.dataset.inc, b.dataset.size, 1)));
   body.querySelectorAll('[data-dec]').forEach(b=>b.addEventListener('click', ()=>changeQty(b.dataset.dec, b.dataset.size, -1)));

@@ -127,6 +127,9 @@
   .custom-banner-title{ font-family:'Anton'; font-size:clamp(18px,3vw,26px); text-transform:uppercase; letter-spacing:0.01em; }
   .custom-banner-cta{ flex-shrink:0; font-weight:800; text-transform:uppercase; font-size:13px; letter-spacing:.04em; border:2px solid var(--cream); border-radius:2px; padding:12px 22px; white-space:nowrap; }
   .custom-banner:hover .custom-banner-cta{ border-color:var(--ink); background:var(--ink); color:var(--cream); }
+  .survey-banner{ background:var(--sage); border-color:var(--sage); margin-top:14px; }
+  .survey-banner:hover{ background:var(--gold); border-color:var(--gold); }
+  .survey-subtag{ font-size:11px; opacity:.85; }
 
   /* ---------- filter bar ---------- */
   .filter-bar{
@@ -206,6 +209,43 @@
   .drawer-subtotal{ display:flex; justify-content:space-between; font-family:'Space Mono'; font-size:13px; font-weight:700; margin-bottom:14px; }
   .drawer-hint{ font-size:12px; color:#5b584d; margin-bottom:10px; line-height:1.5; }
   .drawer-foot .btn{ width:100%; justify-content:center; }
+  .promo-box{ margin-bottom:14px; }
+  .promo-row{ display:flex; gap:8px; }
+  .promo-row input{ flex:1; font-family:'Space Mono'; font-size:12px; border:1.5px solid var(--ink); border-radius:2px; padding:11px 13px; background:var(--paper); outline:none; text-transform:uppercase; }
+  .promo-row input:focus{ border-color:var(--orange); }
+  .promo-row .btn{ width:auto; flex-shrink:0; }
+  .promo-applied{ display:flex; justify-content:space-between; align-items:center; background:#e8f3ea; border:1.5px solid #2f7a3d; border-radius:2px; padding:10px 13px; font-size:12px; }
+  .promo-remove{ font-family:'Space Mono'; font-size:11px; color:#a33; cursor:pointer; text-decoration:underline; }
+  .promo-msg{ font-size:11px; color:#a33; margin-top:6px; min-height:14px; }
+  .promo-hint{ font-size:11px; color:#5b584d; margin-top:6px; line-height:1.5; }
+  .promo-hint a{ color:var(--orange); text-decoration:underline; }
+
+  /* ---------- reviews ---------- */
+  .reviews-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  @media (max-width:900px){ .reviews-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:600px){ .reviews-grid{ grid-template-columns:1fr; } }
+  .review-card{ border:2px solid var(--ink); border-radius:3px; padding:24px 22px; background:var(--paper); display:flex; flex-direction:column; gap:14px; }
+  .review-stars{ font-size:14px; letter-spacing:2px; color:var(--gold); }
+  .review-text{ font-size:14px; line-height:1.6; color:#3a372f; flex:1; }
+  .review-foot{ display:flex; align-items:center; gap:12px; }
+  .review-avatar{ width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); background:var(--rose); display:flex; align-items:center; justify-content:center; font-family:'Anton'; font-size:14px; flex-shrink:0; }
+  .review-name{ font-weight:800; font-size:13px; }
+  .review-meta{ font-family:'Space Mono'; font-size:11px; color:#5b584d; }
+  .review-form-wrap{ margin-top:34px; border:2px solid var(--ink); border-radius:3px; padding:26px; background:var(--cream); max-width:520px; }
+  .review-form-title{ font-size:22px; margin-bottom:16px; }
+  .review-form{ display:flex; flex-direction:column; gap:12px; }
+  .review-form-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .review-form-row input{ flex:1; min-width:160px; }
+  .review-form input, .review-form select, .review-form textarea{
+    font-family:'Archivo', sans-serif; font-size:13px; border:1.5px solid var(--ink); border-radius:2px;
+    padding:11px 13px; background:var(--paper); outline:none; color:var(--ink);
+  }
+  .review-form textarea{ resize:vertical; }
+  .review-form input:focus, .review-form select:focus, .review-form textarea:focus{ border-color:var(--orange); }
+  .review-form-stars{ font-size:26px; letter-spacing:4px; color:var(--line); cursor:pointer; user-select:none; }
+  .review-form-stars span{ color:var(--line); transition:color .15s ease; }
+  .review-form-stars span.filled{ color:var(--gold); }
+  .review-form .btn{ align-self:flex-start; }
 
   /* ---------- delivery info ---------- */
   .info-band{ background:var(--ink); color:var(--cream); padding:70px 0; }
@@ -280,6 +320,7 @@
       <a href="#shop">Shop</a>
       <a href="custom.html">Custom Posters &amp; Polaroids</a>
       <a href="#how">How It Works</a>
+      <a href="#reviews">Reviews</a>
       <a href="#delivery">Delivery</a>
       <a href="#" id="cartNavLink">Cart</a>
     </nav>
@@ -352,6 +393,14 @@
       <span class="custom-banner-cta">Start Custom Order</span>
     </a>
 
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScmkzFz0lvwAraakZI62P8tVSD0TlOcCwM-pEdIwKtZlv9r1g/viewform" target="_blank" rel="noopener" class="custom-banner survey-banner" id="surveyBannerLink">
+      <div class="custom-banner-text">
+        <span class="custom-banner-title">Get 10% Off On Cart Value →</span>
+        <span class="section-tag survey-subtag" style="margin-top:6px; color:var(--sage);">Take our market survey</span>
+      </div>
+      <span class="custom-banner-cta" id="surveyBannerCta">Get My Code</span>
+    </a>
+
     <div class="filter-bar" id="filterBar">
       <div class="result-count" id="resultCount"></div>
       <div class="search-row">
@@ -383,6 +432,106 @@
   </div>
 </section>
 
+<section class="section" id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-tag">Word On The Wall</span>
+        <h2 class="section-title">People love their posters.</h2>
+      </div>
+      <p class="section-note">Real orders, real walls. A few words from the Nailed It community.</p>
+    </div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"The print quality genuinely surprised me — matte finish looks so much more premium than I expected for the price. Ordered 3 more the next week."</p>
+        <div class="review-foot">
+          <div class="review-avatar">A</div>
+          <div>
+            <div class="review-name">Ananya R.</div>
+            <div class="review-meta">Bengaluru · A3 Print</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Ordering was so easy, cart to Google Form in under two minutes. Packaging was solid too, mine arrived without a single crease."</p>
+        <div class="review-foot">
+          <div class="review-avatar">K</div>
+          <div>
+            <div class="review-name">Karthik S.</div>
+            <div class="review-meta">Bengaluru · A4 Print</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">"Got a custom Polaroid set made for a friend's birthday and she loved it. Turnaround was quicker than I thought it'd be."</p>
+        <div class="review-foot">
+          <div class="review-avatar">M</div>
+          <div>
+            <div class="review-name">Meera P.</div>
+            <div class="review-meta">Bengaluru · Poster Polaroid</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"My dorm wall finally looks put together. The designs feel a lot more original than the usual posters you find everywhere else."</p>
+        <div class="review-foot">
+          <div class="review-avatar">R</div>
+          <div>
+            <div class="review-name">Rohan D.</div>
+            <div class="review-meta">Bengaluru · A3 Print</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Colours are vivid and true to what's shown on site — no dull printing here. Shipping was fast and well within the window promised."</p>
+        <div class="review-foot">
+          <div class="review-avatar">S</div>
+          <div>
+            <div class="review-name">Sanya K.</div>
+            <div class="review-meta">Bengaluru · A4 Print</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Third time ordering and it keeps getting better. Love that every poster has an ID so there's zero confusion at checkout."</p>
+        <div class="review-foot">
+          <div class="review-avatar">V</div>
+          <div>
+            <div class="review-name">Vivaan M.</div>
+            <div class="review-meta">Bengaluru · A3 Print</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-form-wrap" id="reviewFormWrap">
+      <span class="section-tag" style="margin-bottom:4px; display:block;">Ordered From Us?</span>
+      <h3 class="review-form-title">Leave a review.</h3>
+      <form id="reviewForm" class="review-form">
+        <div class="review-form-row">
+          <input type="text" id="reviewNameInput" placeholder="Your name" required maxlength="40">
+          <select id="reviewSizeInput">
+            <option value="A4 Print">A4 Print</option>
+            <option value="A3 Print">A3 Print</option>
+            <option value="Poster Polaroid">Poster Polaroid</option>
+          </select>
+        </div>
+        <div class="review-form-stars" id="reviewStarsInput" data-rating="5">
+          <span data-star="1">★</span><span data-star="2">★</span><span data-star="3">★</span><span data-star="4">★</span><span data-star="5">★</span>
+        </div>
+        <textarea id="reviewTextInput" placeholder="Tell us what you thought of your posters..." required maxlength="280" rows="3"></textarea>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+      </form>
+    </div>
+  </div>
+</section>
+
 <section class="info-band" id="delivery">
   <div class="wrap info-grid">
     <div>
@@ -394,9 +543,9 @@
         <li><b>Poster Polaroid</b><span>₹40</span></li>
         <li><b>Standard Delivery</b><span>5–7 working days</span></li>
         <li><b>Express Delivery</b><span>2–3 working days</span></li>
-        <li><b>Shipping Fee</b><span>₹79 · Free above ₹499</span></li>
+        <li><b>Shipping Fee</b><span>₹50 · Free above ₹499</span></li>
         <li><b>Packaging</b><span>Rigid cardboard tube</span></li>
-        <li><b>Serviceable</b><span>All India</span></li>
+        <li><b>Serviceable</b><span>Bengaluru only (for now)</span></li>
       </ul>
     </div>
     <div class="note-box">
@@ -426,15 +575,12 @@
         </div>
         <div class="footer-col">
           <div class="footer-col-title">Follow</div>
-          <a href="#">Instagram</a>
-          <a href="#">Pinterest</a>
-          <a href="#">TikTok</a>
+          <a href="https://www.instagram.com/nailedit.posterz?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener">Instagram</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© 2025 NAILED IT POSTER BRAND — @nailedit.posters</span>
-      <span>Built for internal assessment · no backend, form-based ordering</span>
     </div>
   </div>
 </footer>
@@ -451,7 +597,23 @@
   <div class="drawer-foot" id="drawerFoot" style="display:none;">
     <div class="drawer-hint">Copy these Poster IDs + sizes into the Google Form when you place your order:</div>
     <div class="drawer-ids" id="drawerIds"></div>
+    <div class="promo-box" id="promoBox">
+      <div class="promo-row" id="promoInputRow">
+        <input type="text" id="promoInput" placeholder="Promo code" maxlength="20">
+        <button type="button" class="btn btn-ghost" id="promoApplyBtn" style="padding:11px 16px; font-size:11px;">Apply</button>
+      </div>
+      <div class="promo-applied" id="promoAppliedRow" style="display:none;">
+        <span>🎉 <b>SURVEY10</b> applied — 10% off</span>
+        <span class="promo-remove" id="promoRemoveBtn">Remove</span>
+      </div>
+      <div class="promo-msg" id="promoMsg"></div>
+      <div class="promo-hint">Filled our <a href="https://docs.google.com/forms/d/e/1FAIpQLScmkzFz0lvwAraakZI62P8tVSD0TlOcCwM-pEdIwKtZlv9r1g/viewform" target="_blank" rel="noopener">market survey</a>? Grab your code from the confirmation page.</div>
+    </div>
     <div class="drawer-subtotal"><span>Subtotal</span><span id="drawerSubtotal">₹0</span></div>
+    <div class="drawer-subtotal" id="drawerDiscountRow" style="display:none; color:#2f7a3d;"><span>Discount (10%)</span><span id="drawerDiscount">−₹0</span></div>
+    <div class="drawer-subtotal" id="drawerShippingRow"><span>Shipping</span><span id="drawerShipping">₹0</span></div>
+    <div class="drawer-subtotal" style="border-top:1px solid var(--line); padding-top:10px;"><span>Total</span><span id="drawerTotal">₹0</span></div>
+    <div class="drawer-hint" id="drawerShippingHint" style="margin-top:-4px;"></div>
     <a href="https://docs.google.com/forms/d/e/1FAIpQLScZOO0zdjYY8oC7AcokhZ2s-nPYGLblgdTX20BEtlkPq_YxKw/viewform?usp=publish-editor" target="_blank" rel="noopener" class="btn btn-primary" id="orderFormBtn">Place Order via Google Form →</a>
   </div>
 </div>
@@ -913,11 +1075,33 @@ function renderCart(){
   }).join('');
 
   foot.style.display = 'block';
-  const idsSummary = cart.map(i=>`${i.id} (${i.size}) x${i.qty}`).join(",  ");
+  const idsSummary = cart.map(i=>`${i.id} (${i.size}) x${i.qty}`).join(",  ")
+    + (localStorage.getItem(PROMO_KEY) === '1' ? "  |  PROMO: SURVEY10" : "");
   document.getElementById('drawerIds').textContent = idsSummary;
 
   const subtotal = cart.reduce((s,i)=> s + PRICES[i.size]*i.qty, 0);
   document.getElementById('drawerSubtotal').textContent = `₹${subtotal}`;
+
+  const promoApplied = localStorage.getItem(PROMO_KEY) === '1';
+  const discount = promoApplied ? Math.round(subtotal * 0.10) : 0;
+  document.getElementById('drawerDiscountRow').style.display = discount > 0 ? 'flex' : 'none';
+  document.getElementById('drawerDiscount').textContent = `−₹${discount}`;
+
+  const SHIPPING_FEE = 50;
+  const FREE_SHIPPING_THRESHOLD = 499;
+  // Free-shipping threshold is based on subtotal before the promo discount,
+  // so the survey discount doesn't accidentally void free shipping.
+  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+  document.getElementById('drawerShipping').textContent = shipping === 0 ? 'FREE' : `₹${shipping}`;
+  document.getElementById('drawerTotal').textContent = `₹${subtotal - discount + shipping}`;
+  const shippingHint = document.getElementById('drawerShippingHint');
+  if(shipping > 0){
+    shippingHint.textContent = `Add ₹${FREE_SHIPPING_THRESHOLD - subtotal} more to get free shipping.`;
+  } else {
+    shippingHint.textContent = `You've unlocked free shipping!`;
+  }
+
+  refreshPromoUI();
 
   // Orders are now accepted via Google Form (order.html has been retired).
   // The Google Form link is static and already set on the button's href
@@ -928,6 +1112,38 @@ function renderCart(){
   body.querySelectorAll('[data-dec]').forEach(b=>b.addEventListener('click', ()=>changeQty(b.dataset.dec, b.dataset.size, -1)));
   body.querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click', ()=>removeFromCart(b.dataset.remove, b.dataset.size)));
 }
+
+/* ---------------- PROMO CODE (market survey 10% off) ---------------- */
+const PROMO_KEY = 'nailedit_promo_applied';
+const VALID_PROMO_CODE = 'SURVEY10';
+
+function refreshPromoUI(){
+  const applied = localStorage.getItem(PROMO_KEY) === '1';
+  document.getElementById('promoInputRow').style.display = applied ? 'none' : 'flex';
+  document.getElementById('promoAppliedRow').style.display = applied ? 'flex' : 'none';
+}
+
+document.getElementById('promoApplyBtn').addEventListener('click', ()=>{
+  const input = document.getElementById('promoInput');
+  const msg = document.getElementById('promoMsg');
+  const code = input.value.trim().toUpperCase();
+  if(code === VALID_PROMO_CODE){
+    localStorage.setItem(PROMO_KEY, '1');
+    msg.textContent = '';
+    input.value = '';
+    renderCart();
+    showToast('10% survey discount applied!');
+  } else {
+    msg.textContent = 'That code isn\'t valid. Fill the survey to get one.';
+  }
+});
+document.getElementById('promoInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ e.preventDefault(); document.getElementById('promoApplyBtn').click(); }
+});
+document.getElementById('promoRemoveBtn').addEventListener('click', ()=>{
+  localStorage.removeItem(PROMO_KEY);
+  renderCart();
+});
 
 /* Drawer open/close */
 const drawer = document.getElementById('cartDrawer');
@@ -1019,10 +1235,75 @@ function syncStickyOffsets(){
 window.addEventListener('load', syncStickyOffsets);
 window.addEventListener('resize', syncStickyOffsets);
 
+/* ---------------- REVIEWS (submit + persist locally) ---------------- */
+const REVIEW_KEY = 'nailedit_reviews_v1';
+const reviewsGrid = document.querySelector('.reviews-grid');
+
+function loadSavedReviews(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(REVIEW_KEY) || '[]');
+    saved.forEach(r => reviewsGrid.insertAdjacentHTML('afterbegin', reviewCardHTML(r)));
+  }catch(e){ /* ignore corrupt storage */ }
+}
+
+function reviewCardHTML(r){
+  const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+  const initial = r.name.trim().charAt(0).toUpperCase() || '?';
+  const safeName = r.name.replace(/</g,'&lt;');
+  const safeText = r.text.replace(/</g,'&lt;');
+  return `
+      <div class="review-card">
+        <div class="review-stars">${stars}</div>
+        <p class="review-text">"${safeText}"</p>
+        <div class="review-foot">
+          <div class="review-avatar">${initial}</div>
+          <div>
+            <div class="review-name">${safeName}</div>
+            <div class="review-meta">Bengaluru · ${r.size}</div>
+          </div>
+        </div>
+      </div>`;
+}
+
+const starsInput = document.getElementById('reviewStarsInput');
+if(starsInput){
+  const starEls = [...starsInput.querySelectorAll('span')];
+  function paintStars(n){
+    starEls.forEach(s => s.classList.toggle('filled', +s.dataset.star <= n));
+  }
+  paintStars(5);
+  starEls.forEach(s => s.addEventListener('click', ()=>{
+    starsInput.dataset.rating = s.dataset.star;
+    paintStars(+s.dataset.star);
+  }));
+
+  document.getElementById('reviewForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const name = document.getElementById('reviewNameInput').value.trim();
+    const size = document.getElementById('reviewSizeInput').value;
+    const text = document.getElementById('reviewTextInput').value.trim();
+    const rating = +starsInput.dataset.rating || 5;
+    if(!name || !text) return;
+
+    const review = { name, size, text, rating };
+    reviewsGrid.insertAdjacentHTML('afterbegin', reviewCardHTML(review));
+
+    const saved = JSON.parse(localStorage.getItem(REVIEW_KEY) || '[]');
+    saved.unshift(review);
+    localStorage.setItem(REVIEW_KEY, JSON.stringify(saved));
+
+    e.target.reset();
+    paintStars(5);
+    starsInput.dataset.rating = 5;
+    showToast('Thanks for your review!');
+  });
+}
+
 /* ---------------- INIT ---------------- */
 syncStickyOffsets();
 renderGrid();
 renderCart();
+loadSavedReviews();
 </script>
 </body>
 </html>

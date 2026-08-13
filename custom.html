@@ -119,6 +119,51 @@
   .note-box{ border:1.5px dashed var(--ink); border-radius:4px; padding:24px; font-size:13px; line-height:1.65; background:var(--paper); margin-top:40px; }
   .note-box b{ font-weight:800; }
 
+  /* ---------- qty controls & add to cart ---------- */
+  .size-pills{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+  .size-pill{ font-family:'Space Mono'; font-size:12px; border:1.5px solid var(--ink); border-radius:999px; padding:8px 14px; background:var(--cream); cursor:pointer; }
+  .size-pill b{ color:var(--orange); }
+  .size-pill.active{ background:var(--ink); color:var(--cream); }
+  .size-pill.active b{ color:var(--rose); }
+  .opt-qty-row{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:auto; }
+  .opt-qty-control{ display:flex; align-items:center; gap:12px; font-family:'Space Mono'; font-size:14px; }
+  .opt-qty-control button{ width:30px; height:30px; border-radius:50%; border:2px solid var(--ink); background:var(--cream); cursor:pointer; font-size:15px; line-height:1; }
+  .opt-qty-control span{ min-width:18px; text-align:center; }
+  .opt-add-btn{ flex-shrink:0; }
+
+  /* ---------- cart icon ---------- */
+  .cart-count{ display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; text-transform:uppercase; cursor:pointer; white-space:nowrap; }
+  .cart-badge{ background:var(--ink); color:var(--cream); border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; font-size:11px; font-family:'Space Mono'; flex-shrink:0; }
+
+  /* ---------- cart drawer ---------- */
+  .overlay{ position:fixed; inset:0; background:rgba(26,26,23,0.5); z-index:200; opacity:0; pointer-events:none; transition:opacity .25s ease; }
+  .overlay.open{ opacity:1; pointer-events:auto; }
+  .drawer{ position:fixed; top:0; right:0; height:100%; width:420px; max-width:92vw; background:var(--cream); z-index:201; border-left:2px solid var(--ink); transform:translateX(100%); transition:transform .3s ease; display:flex; flex-direction:column; }
+  .drawer.open{ transform:translateX(0); }
+  .drawer-head{ padding:22px 24px; border-bottom:2px solid var(--ink); display:flex; justify-content:space-between; align-items:center; }
+  .drawer-head h3{ font-size:22px; }
+  .drawer-close{ font-size:22px; background:none; border:none; cursor:pointer; }
+  .drawer-body{ padding:10px 24px; overflow-y:auto; flex:1; }
+  .drawer-item{ display:flex; gap:12px; padding:16px 0; border-bottom:1px solid var(--line); align-items:center; }
+  .drawer-item-info{ flex:1; min-width:0; }
+  .drawer-item-title{ font-weight:800; font-size:13px; }
+  .drawer-item-id{ font-family:'Space Mono'; font-size:11px; color:var(--orange); }
+  .drawer-item-qty{ display:flex; align-items:center; gap:8px; margin-top:6px; flex-wrap:wrap; }
+  .qty-btn{ width:22px; height:22px; border:1.5px solid var(--ink); border-radius:50%; background:none; cursor:pointer; font-family:'Space Mono'; font-size:12px; line-height:1; }
+  .drawer-item-remove{ font-family:'Space Mono'; font-size:11px; color:#a33; cursor:pointer; text-decoration:underline; margin-left:auto; }
+  .drawer-empty{ padding:60px 0; text-align:center; font-family:'Space Mono'; font-size:13px; color:#5b584d; }
+  .drawer-foot{ padding:20px 24px; border-top:2px solid var(--ink); }
+  .drawer-subtotal{ display:flex; justify-content:space-between; font-family:'Space Mono'; font-size:13px; font-weight:700; margin-bottom:14px; }
+  .drawer-hint{ font-size:12px; color:#5b584d; margin-bottom:10px; line-height:1.5; }
+  .drawer-foot .btn{ width:100%; justify-content:center; }
+  .order-code-box{ font-family:'Space Mono'; font-size:11px; background:var(--paper); border:1.5px dashed var(--ink); border-radius:4px; padding:14px; margin-bottom:10px; }
+  .order-code-box .code-label{ display:block; color:#5b584d; margin-bottom:6px; letter-spacing:.05em; text-transform:uppercase; font-size:10px; }
+  .order-code-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .order-code-value{ font-size:18px; font-weight:700; letter-spacing:.06em; color:var(--orange); }
+  .order-code-copy{ font-size:11px; border:1.5px solid var(--ink); border-radius:999px; padding:6px 12px; cursor:pointer; background:var(--cream); white-space:nowrap; }
+  .toast{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(120%); background:var(--ink); color:var(--cream); padding:14px 24px; border-radius:999px; font-family:'Space Mono'; font-size:12px; z-index:400; transition:transform .3s ease; max-width:90vw; text-align:center; }
+  .toast.show{ transform:translateX(-50%) translateY(0); }
+
   /* ---------- footer ---------- */
   footer{ padding:50px 0 30px; border-top:1px solid var(--line); margin-top:20px; }
   .footer-grid{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:24px; padding-bottom:30px; }
@@ -166,6 +211,7 @@
       <a href="index.html#delivery">Delivery</a>
     </nav>
     <div class="nav-right">
+      <div class="cart-count" id="cartOpenBtn">🛒 <span class="cart-badge" id="cartBadge">0</span></div>
       <a href="index.html" class="btn btn-ghost" style="padding:10px 18px; font-size:12px;">← Back to Shop</a>
       <button class="nav-toggle" id="navToggle">☰</button>
     </div>
@@ -225,12 +271,19 @@
       <div class="opt-card">
         <div class="opt-icon">🖼️</div>
         <h3 class="opt-title">Custom Poster</h3>
-        <p class="opt-desc">Your photo, printed full-size on the same 210 GSM matte stock as the rest of our collection. Pick A4 or A3 in the form.</p>
-        <div class="opt-prices">
-          <span class="opt-price-pill">A4 · <b>₹69</b></span>
-          <span class="opt-price-pill">A3 · <b>₹119</b></span>
+        <p class="opt-desc">Your photo, printed full-size on the same 210 GSM matte stock as the rest of our collection. Pick a size, choose how many, and add to cart.</p>
+        <div class="size-pills" id="posterSizePills" data-format="Custom Poster">
+          <span class="size-pill active" data-size="A4" data-price="69">A4 · <b>₹69</b></span>
+          <span class="size-pill" data-size="A3" data-price="119">A3 · <b>₹119</b></span>
         </div>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLScZOO0zdjYY8oC7AcokhZ2s-nPYGLblgdTX20BEtlkPq_YxKw/viewform?usp=publish-editor" target="_blank" rel="noopener" class="btn btn-primary">Order a Custom Poster via Google Form →</a>
+        <div class="opt-qty-row">
+          <div class="opt-qty-control">
+            <button type="button" data-qty-dec="poster">−</button>
+            <span id="posterQty">1</span>
+            <button type="button" data-qty-inc="poster">+</button>
+          </div>
+          <button type="button" class="btn btn-primary opt-add-btn" id="addPosterBtn">Add to Cart</button>
+        </div>
       </div>
 
       <div class="opt-card">
@@ -240,14 +293,21 @@
         <div class="opt-prices">
           <span class="opt-price-pill">Polaroid · <b>₹50</b></span>
         </div>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLScZOO0zdjYY8oC7AcokhZ2s-nPYGLblgdTX20BEtlkPq_YxKw/viewform?usp=publish-editor" target="_blank" rel="noopener" class="btn btn-primary">Order a Custom Polaroid via Google Form →</a>
+        <div class="opt-qty-row">
+          <div class="opt-qty-control">
+            <button type="button" data-qty-dec="polaroid">−</button>
+            <span id="polaroidQty">1</span>
+            <button type="button" data-qty-inc="polaroid">+</button>
+          </div>
+          <button type="button" class="btn btn-primary opt-add-btn" id="addPolaroidBtn">Add to Cart</button>
+        </div>
       </div>
     </div>
 
     <div class="steps">
-      <div class="step"><div class="step-num">01</div><div class="step-title">Pick a Format</div><div class="step-sub">Custom poster (A4/A3) or a custom Polaroid — choose above.</div></div>
-      <div class="step"><div class="step-num">02</div><div class="step-title">Place Your Order via Google Form</div><div class="step-sub">Tap "Order" — it opens our Google Form, where you select your format and pay.</div></div>
-      <div class="step"><div class="step-num">03</div><div class="step-title">Upload Your Photo</div><div class="step-sub">Attach the picture you want printed in the form, plus your delivery details.</div></div>
+      <div class="step"><div class="step-num">01</div><div class="step-title">Pick a Format &amp; Qty</div><div class="step-sub">Choose poster size or Polaroid, set how many you want, and add to cart.</div></div>
+      <div class="step"><div class="step-num">02</div><div class="step-title">Open Your Cart</div><div class="step-sub">Your cart shows a unique Order Code — copy it, you'll need it for the form.</div></div>
+      <div class="step"><div class="step-num">03</div><div class="step-title">Submit the Google Form</div><div class="step-sub">Paste your Order Code, upload your photo(s), pay via the QR code, and add delivery details.</div></div>
       <div class="step"><div class="step-num">04</div><div class="step-title">We Print &amp; Ship</div><div class="step-sub">Your custom print is packed carefully and shipped across India.</div></div>
     </div>
 
@@ -288,12 +348,183 @@
   </div>
 </footer>
 
+<div class="overlay" id="overlay"></div>
+<div class="drawer" id="cartDrawer">
+  <div class="drawer-head">
+    <h3>Your Cart</h3>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody">
+    <div class="drawer-empty">Your cart is empty.<br>Add a custom poster or Polaroid to get started.</div>
+  </div>
+  <div class="drawer-foot" id="drawerFoot" style="display:none;">
+    <div class="order-code-box">
+      <span class="code-label">Your Unique Order Code</span>
+      <div class="order-code-row">
+        <span class="order-code-value" id="orderCodeValue">—</span>
+        <button type="button" class="order-code-copy" id="orderCodeCopyBtn">Copy</button>
+      </div>
+    </div>
+    <div class="drawer-hint">Paste this Order Code into the Google Form along with your photo(s) so we can match your upload to this cart.</div>
+    <div class="drawer-subtotal"><span>Subtotal</span><span id="drawerSubtotal">₹0</span></div>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScZOO0zdjYY8oC7AcokhZ2s-nPYGLblgdTX20BEtlkPq_YxKw/viewform?usp=publish-editor" target="_blank" rel="noopener" class="btn btn-primary" id="orderFormBtn">Place Order via Google Form →</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">Added to cart</div>
+
 <script>
   const navLinks = document.getElementById('navLinks');
   document.getElementById('navToggle').addEventListener('click', ()=>{
     navLinks.classList.toggle('open');
   });
   navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>navLinks.classList.remove('open')));
+
+  /* ---------------- CUSTOM CART ---------------- */
+  const CART_KEY = 'nailedit_custom_cart_v1';
+  const CODE_KEY = 'nailedit_custom_order_code';
+
+  let customCart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+
+  function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(customCart)); }
+
+  function getOrderCode(){
+    let code = localStorage.getItem(CODE_KEY);
+    if(!code){
+      code = generateOrderCode();
+      localStorage.setItem(CODE_KEY, code);
+    }
+    return code;
+  }
+  function generateOrderCode(){
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no confusing 0/O/1/I
+    let code = 'NI-';
+    for(let i=0;i<6;i++) code += chars[Math.floor(Math.random()*chars.length)];
+    return code;
+  }
+
+  function addToCart(format, size, price, qty){
+    const existing = customCart.find(i=>i.format===format && i.size===size);
+    if(existing){ existing.qty += qty; }
+    else{ customCart.push({ format, size, price, qty }); }
+    saveCart();
+    renderCustomCart();
+    showToast(`Added ${qty} × ${format}${size ? ' ('+size+')' : ''} to cart`);
+  }
+  function changeQty(format, size, delta){
+    const item = customCart.find(i=>i.format===format && i.size===size);
+    if(!item) return;
+    item.qty += delta;
+    if(item.qty <= 0) customCart = customCart.filter(i=>i!==item);
+    saveCart();
+    renderCustomCart();
+  }
+  function removeFromCart(format, size){
+    customCart = customCart.filter(i=>!(i.format===format && i.size===size));
+    saveCart();
+    renderCustomCart();
+  }
+
+  function renderCustomCart(){
+    const body = document.getElementById('drawerBody');
+    const foot = document.getElementById('drawerFoot');
+    const totalQty = customCart.reduce((s,i)=>s+i.qty,0);
+    document.getElementById('cartBadge').textContent = totalQty;
+
+    if(customCart.length === 0){
+      body.innerHTML = `<div class="drawer-empty">Your cart is empty.<br>Add a custom poster or Polaroid to get started.</div>`;
+      foot.style.display = 'none';
+      localStorage.removeItem(CODE_KEY); // fresh code for the next order
+      return;
+    }
+
+    body.innerHTML = customCart.map(item=>`
+      <div class="drawer-item">
+        <div class="drawer-item-info">
+          <div class="drawer-item-title">${item.format}${item.size ? ' — ' + item.size : ''}</div>
+          <div class="drawer-item-id">₹${item.price} each</div>
+          <div class="drawer-item-qty">
+            <button class="qty-btn" data-dec="${item.format}" data-size="${item.size||''}">−</button>
+            <span class="mono">${item.qty}</span>
+            <button class="qty-btn" data-inc="${item.format}" data-size="${item.size||''}">+</button>
+            <span class="drawer-item-remove" data-remove="${item.format}" data-size="${item.size||''}">Remove</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    foot.style.display = 'block';
+    const subtotal = customCart.reduce((s,i)=> s + i.price*i.qty, 0);
+    document.getElementById('drawerSubtotal').textContent = `₹${subtotal}`;
+    document.getElementById('orderCodeValue').textContent = getOrderCode();
+
+    body.querySelectorAll('[data-inc]').forEach(b=>b.addEventListener('click', ()=>changeQty(b.dataset.inc, b.dataset.size, 1)));
+    body.querySelectorAll('[data-dec]').forEach(b=>b.addEventListener('click', ()=>changeQty(b.dataset.dec, b.dataset.size, -1)));
+    body.querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click', ()=>removeFromCart(b.dataset.remove, b.dataset.size)));
+  }
+
+  /* Poster size pill selection */
+  let posterSelectedSize = 'A4', posterSelectedPrice = 69;
+  const posterPills = document.getElementById('posterSizePills');
+  posterPills.addEventListener('click', (e)=>{
+    const pill = e.target.closest('.size-pill');
+    if(!pill) return;
+    posterPills.querySelectorAll('.size-pill').forEach(p=>p.classList.remove('active'));
+    pill.classList.add('active');
+    posterSelectedSize = pill.dataset.size;
+    posterSelectedPrice = +pill.dataset.price;
+  });
+
+  /* Qty steppers */
+  let posterQty = 1, polaroidQty = 1;
+  document.querySelector('[data-qty-inc="poster"]').addEventListener('click', ()=>{
+    posterQty++; document.getElementById('posterQty').textContent = posterQty;
+  });
+  document.querySelector('[data-qty-dec="poster"]').addEventListener('click', ()=>{
+    posterQty = Math.max(1, posterQty-1); document.getElementById('posterQty').textContent = posterQty;
+  });
+  document.querySelector('[data-qty-inc="polaroid"]').addEventListener('click', ()=>{
+    polaroidQty++; document.getElementById('polaroidQty').textContent = polaroidQty;
+  });
+  document.querySelector('[data-qty-dec="polaroid"]').addEventListener('click', ()=>{
+    polaroidQty = Math.max(1, polaroidQty-1); document.getElementById('polaroidQty').textContent = polaroidQty;
+  });
+
+  document.getElementById('addPosterBtn').addEventListener('click', ()=>{
+    addToCart('Custom Poster', posterSelectedSize, posterSelectedPrice, posterQty);
+    posterQty = 1; document.getElementById('posterQty').textContent = 1;
+  });
+  document.getElementById('addPolaroidBtn').addEventListener('click', ()=>{
+    addToCart('Custom Polaroid', '', 50, polaroidQty);
+    polaroidQty = 1; document.getElementById('polaroidQty').textContent = 1;
+  });
+
+  /* Drawer open/close */
+  const drawer = document.getElementById('cartDrawer');
+  const overlay = document.getElementById('overlay');
+  function openDrawer(){ drawer.classList.add('open'); overlay.classList.add('open'); navLinks.classList.remove('open'); }
+  function closeDrawer(){ drawer.classList.remove('open'); overlay.classList.remove('open'); }
+  document.getElementById('cartOpenBtn').addEventListener('click', openDrawer);
+  document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', closeDrawer);
+
+  document.getElementById('orderCodeCopyBtn').addEventListener('click', ()=>{
+    const code = document.getElementById('orderCodeValue').textContent;
+    navigator.clipboard.writeText(code).catch(()=>{});
+    showToast('Order code copied!');
+  });
+
+  /* Toast */
+  let toastTimer;
+  function showToast(msg){
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toast.classList.remove('show'), 2200);
+  }
+
+  renderCustomCart();
 </script>
 
 </body>
